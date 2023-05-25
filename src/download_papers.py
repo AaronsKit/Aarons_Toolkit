@@ -453,10 +453,11 @@ def get_articles(
             )
         )
 
-    if journal_id:
+    if journal_id and articles_size > 0:
         receive_next_page_action()
     else:
         receive_continue_download_action()
+        
 
 
 def receive_next_page_action():
