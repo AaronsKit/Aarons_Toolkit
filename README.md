@@ -40,4 +40,6 @@ The Aaron's Kit executable functions as a tool to (1) bulk download papers for p
 
 5. Download the executable.
 
+6. Put your device on charge and set your computer never to sleep while on battery and on charge. 
+
 6. Open the executable by double clicking, and select the option **[2] contribute papers**. Follow the prompts that will guide you through the process to login to JSTOR and select the relevant Journal's or Author's papers you would like to contribute.
