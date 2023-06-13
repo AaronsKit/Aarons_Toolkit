@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "aarons_toolkit"
+name = "aarons-toolkit"
 version = "0.1.0"
 description = "a decentralised scraper designed to help researchers and students liberate academic research locked behind paywalls."
-authors = ["Your Name <you@example.com>"]
+authors = ["Aarons KIT"]
 readme = "README.md"
+packages = [{include = "aarons_toolkit"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
@@ -15,11 +16,9 @@ speedtest-cli = "^2.1.3"
 emoji = "^2.2.0"
 boto3 = "^1.26.107"
 termcolor = "^2.2.0"
-packaging = "^23.0"
 py-algorand-sdk = "^2.1.2"
-auto-py-to-exe = "^2.33.0"
-ffmpy = "^0.3.0"
 pyFLAC = "^2.1.0"
+auto-py-to-exe = "^2.35.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

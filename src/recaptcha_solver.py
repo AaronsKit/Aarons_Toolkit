@@ -85,7 +85,7 @@ def recaptcha_solver(driver, url, url_pending, wait, misc_directory, jstor_url):
 
     print("\ntrying to find reCAPTCHA")
 
-    time.sleep(wait)
+    time.sleep(10)
 
     recaptcha_control_frame, recaptcha_challenge_frame = frame(driver)
 
@@ -110,7 +110,6 @@ def recaptcha_solver(driver, url, url_pending, wait, misc_directory, jstor_url):
 
         try:
             # switch to checkbox
-            # time.sleep(wait)
 
             # test to make reCAPTCHA solve fail: driver.switch_to.frame(recaptcha_challenge_frame)
             driver.switch_to.default_content()
@@ -170,7 +169,6 @@ def recaptcha_solver(driver, url, url_pending, wait, misc_directory, jstor_url):
                     driver.switch_to.frame(recaptcha_challenge_frame)
 
                     # get the mp3 audio file
-                    # time.sleep(wait)
                     time.sleep(5)
                     src = driver.find_element(By.ID, "audio-source").get_attribute(
                         "src"

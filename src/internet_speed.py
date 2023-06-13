@@ -38,19 +38,19 @@ def delay(mbps):
 
     if mbps <= 10:
 
-        wait = 30
+        wait = 20
 
     elif mbps <= 25:
 
-        wait = 20
+        wait = 15
 
     elif mbps <= 75:
 
-        wait = 15
+        wait = 10
 
     else:
 
-        wait = 10
+        wait = 5
 
     return wait
 
