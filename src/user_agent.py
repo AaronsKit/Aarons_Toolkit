@@ -1,6 +1,6 @@
-import time
 import random
 import emoji
+import textwrap
 
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -16,9 +16,18 @@ is_windows = system()
 
 
 def get_user_agent(wait):
+    print("\nDetermining User Agent.")
 
+    print(
+        "\n"
+        + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
+        + emoji.emojize(":information:") * (not is_windows)
+        + textwrap.fill(
+            "   You may notice that a browser window opened, we are using chrome to check your User Agent online!",
+            100,
+        )
+    )
     try:
-
         chrome_options = chrome_options = webdriver.ChromeOptions()
 
         chrome_options.add_argument("--window-size=1920,1080")
@@ -42,15 +51,14 @@ def get_user_agent(wait):
         )
 
     except:
-
         user_agent = get_user_agent_fixed()
 
     print(
-        "\n\n"
+        "\n"
         + colored(" ! ", "green", attrs=["reverse"]) * (is_windows)
         + emoji.emojize(":check_mark_button:") * (not is_windows)
         + colored(
-            "   User Agent found",
+            "   User Agent found.",
             "green",
         )
     )
@@ -59,7 +67,6 @@ def get_user_agent(wait):
 
 
 def get_user_agent_fixed():
-
     user_agent_win = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0",
@@ -94,11 +101,9 @@ def get_user_agent_fixed():
     ]
 
     if is_windows:
-
         user_agent = random.choice(user_agent_win)
 
     else:
-
         user_agent = random.choice(user_agent_mac)
 
     return user_agent

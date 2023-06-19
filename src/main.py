@@ -1,6 +1,5 @@
 import os.path
 import logging
-import re
 import emoji
 import os
 import warnings

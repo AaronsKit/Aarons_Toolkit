@@ -15,25 +15,23 @@ misc_directory = misc_path()
 
 
 def print_donation_explainer():
-
     print("\n\nGreat! You are on your way to make a contribution!")
 
     print("\n\n" + colored("Receive donations", attrs=["reverse"]))
 
     print(
-        "\n\nThe Open Access community really appreciates your work, and would like to thank you by donating ALGO to your Algorand account.\n"
+        "\n\nThe Open Access community really appreciates your work, and would like to thank you by donating ALGO to your Algorand account.\n",
     )
     print(
         colored("\nHow this works:", attrs=["reverse"]) * (is_windows)
         + colored("\nHow this works:", attrs=["bold", "underline"]) * (not is_windows)
     )
     print(
-        "\n• Aaron's Kit users donate ALGO. \n• After a set payout time period, the ALGO is aggregated and distributed to all Aaron's Kit contributors, like you. \n• The amount of ALGO you receive is weighted according to the total number of papers you have scraped.\n• To receive ALGO, all you need is an Algorand account.\n"
+        "\n• Aaron's Kit users donate ALGO. \n• After a set payout time period, the ALGO is aggregated and distributed to all Aaron's Kit contributors, like you. \n• The amount of ALGO you receive is weighted according to the total number of papers you have scraped.\n• To receive ALGO, all you need is an Algorand account.\n",
     )
 
 
 def receive_donation_action():
-
     print(
         "\n"
         + (colored(" i ", "blue", attrs=["reverse"])) * (is_windows)
@@ -60,11 +58,8 @@ def receive_donation_action():
 
 
 def process_donation_action(donation_action):
-
     if donation_action == "1":
-
         try:
-
             user_address = check_address_on_record()
 
         except TypoException:
@@ -75,7 +70,6 @@ def process_donation_action(donation_action):
         passphrase, user_address = create_account()
         display_account_created(passphrase, user_address)
     elif donation_action == "3":
-
         print(
             "\n\n"
             + (colored(" ! ", "green", attrs=["reverse"])) * (is_windows)
@@ -98,7 +92,6 @@ def process_donation_action(donation_action):
 
 
 def receive_not_validated_action():
-
     retry_account_action = get_input(
         colored(
             "\n-- Type [1] to retry"
@@ -117,7 +110,6 @@ def receive_not_validated_action():
 
 
 def process_validation_action(retry_account_action):
-
     if retry_account_action == "1":
         user_address = validate_existing_account()
         return user_address
@@ -134,7 +126,6 @@ def process_validation_action(retry_account_action):
 
 
 def validate_existing_account():
-
     user_address = get_input(
         "\n\n"
         + (colored(" i ", "blue")) * (is_windows)
@@ -143,7 +134,6 @@ def validate_existing_account():
     )
 
     if encoding.is_valid_address(user_address):
-
         print(
             "\n\n"
             + (colored(" ! ", "green", attrs=["reverse"])) * (is_windows)
@@ -167,7 +157,6 @@ def validate_existing_account():
         store_address(user_address)
 
     else:
-
         print(
             "\n\n"
             + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
@@ -181,11 +170,9 @@ def validate_existing_account():
 
 
 def check_address_on_record():
-
     user_address_dict = get_user_address_from_json(misc_directory)
 
     if user_address_dict["address"] != "":
-
         user_address = user_address_dict["address"]
 
         correct_address = get_input(
@@ -222,7 +209,6 @@ def check_address_on_record():
 
 
 def validate_correct_address(correct_address):
-
     if correct_address == "n" or correct_address == "N":
         user_address = validate_existing_account()
     else:
@@ -233,7 +219,6 @@ def validate_correct_address(correct_address):
 
 
 def create_account():
-
     private_key, user_address = account.generate_account()
 
     passphrase = mnemonic.from_private_key(private_key)
@@ -244,7 +229,6 @@ def create_account():
 
 
 def store_address(user_address):
-
     user_address_dict = get_user_address_from_json(misc_directory)
 
     user_address_dict["address"] = user_address
@@ -257,7 +241,6 @@ def store_address(user_address):
 
 
 def display_account_created(passphrase, user_address):
-
     print(
         "\n\n"
         + (colored(" i ", "blue", attrs=["reverse"])) * (is_windows)

@@ -12,8 +12,8 @@ from src.helpers import system, print_typo
 
 is_windows = system()
 
-def print_login_requirements():
 
+def print_login_requirements():
     print(colored("\n\n\nSet-up and Dependencies", attrs=["reverse"]))
 
     print(colored("\n\nPlease note:", attrs=["reverse"]) * (is_windows))
@@ -47,12 +47,12 @@ def print_login_requirements():
     )
 
     print(
-        "• Have Google Chrome installed. To install, visit https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538. \n• Have ffmpeg and ffprobe installed. For installation instructions, visit https://www.wikihow.com/Install-FFmpeg-on-Windows. \n• Have a stable internet connection.\n• Keep your device on charge and set to 'never sleep' while on battery and on charge."
+        "• Have Google Chrome installed. To install, visit https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538. \n• Have a stable internet connection.\n• Keep your device on charge and set to 'never sleep' while on battery and on charge."
         * (is_windows)
     )
 
     print(
-        "• Have Google Chrome installed. To install, visit https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538. \n• Have ffmpeg and ffprobe installed. For installation instructions, visit https://bbc.github.io/bbcat-orchestration-docs/installation-mac-manual/. \n• Have a stable internet connection.\n• Keep your device on charge and set to 'never sleep' while on battery and on charge."
+        "• Have Google Chrome installed. To install, visit https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538. \n• Have a stable internet connection.\n• Keep your device on charge and set to 'never sleep' while on battery and on charge."
         * (not is_windows)
     )
 
@@ -75,7 +75,6 @@ def print_login_requirements():
 
 
 def print_login_instructions():
-
     print("\n\n\n" + colored("JSTOR Login", attrs=["reverse"]))
 
     print(
@@ -105,7 +104,7 @@ def print_login_instructions():
     )
 
     print(
-        "\n\n• If you choose to login via VPN or wifi, your credentials will already be authenticated and you won't need to provide\n  any login details.\n• If you choose to login via the JSTOR website, you will be prompted to enter your login details via your university\n  portal on JSTOR."
+        "\n\n• If you choose to login via VPN or wifi, your credentials will already be authenticated and you won't need to provide any login details.\n• If you choose to login via the JSTOR website, you will be prompted to enter your login details via your university portal on JSTOR."
     )
 
     time.sleep(2)
@@ -120,7 +119,6 @@ def print_login_instructions():
 
 
 def receive_login_action():
-
     print(
         "\n"
         + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
@@ -141,7 +139,6 @@ def receive_login_action():
 
 
 def vpn_login(driver, url, html_load, html_login):
-
     print(
         "\n"
         + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
@@ -163,7 +160,6 @@ def vpn_login(driver, url, html_load, html_login):
     cont = receive_proceed_action()
 
     if cont == "1":
-
         print("\nGive it a second, we are checking for successful login.\n")
 
         driver.get(url)
@@ -174,24 +170,20 @@ def vpn_login(driver, url, html_load, html_login):
         time.sleep(2)
 
         if validate_login(driver, html_login) == True:
-
             driver.maximize_window()
 
             return True
 
         else:
-
             return False
 
     elif cont == "2":
-
         driver.close()
 
         return False
 
 
 def manual_login(driver, url, html_load, html_login):
-
     print("\nYou are now being routed to JSTOR home page.")
 
     time.sleep(2)
@@ -239,7 +231,6 @@ def manual_login(driver, url, html_load, html_login):
     driver.get(url)
 
     if validate_page_load(driver, html_load) == False:
-
         return False
 
     try:
@@ -264,9 +255,7 @@ def manual_login(driver, url, html_load, html_login):
     cont = receive_proceed_action()
 
     if cont == "1":
-
         if validate_page_load(driver, html_load) == False:
-
             return False
 
         print("\nChecking for successful login.\n")
@@ -274,7 +263,6 @@ def manual_login(driver, url, html_load, html_login):
         time.sleep(1)
 
         if validate_login(driver, html_login) == True:
-
             try:
                 driver.maximize_window()
                 driver.set_window_position(-2024, 2024)
@@ -284,20 +272,16 @@ def manual_login(driver, url, html_load, html_login):
             return True
 
         else:
-
             return False
 
     else:
-
         driver.close()
 
         return False
 
 
 def validate_page_load(driver, html_load):
-
     try:
-
         WebDriverWait(driver, 60).until(
             expected_conditions.element_to_be_clickable(
                 (
@@ -308,7 +292,6 @@ def validate_page_load(driver, html_load):
         )
 
     except:
-
         print(
             "\n"
             + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -331,7 +314,6 @@ def validate_page_load(driver, html_load):
 
 
 def validate_login(driver, html_login):
-
     try:
         driver.find_element(By.CLASS_NAME, html_login)
 
@@ -349,7 +331,6 @@ def validate_login(driver, html_login):
         return True
 
     except:
-
         time.sleep(1)
 
         print_unsuccessful()
@@ -358,7 +339,6 @@ def validate_login(driver, html_login):
 
 
 def print_unsuccessful():
-
     print(
         "\n"
         + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -375,14 +355,12 @@ def print_unsuccessful():
 
 
 def receive_proceed_action():
-
     proceed_input = get_input(
         colored(
             "\n-- Type [1] to continue\n-- Type [2] to return to contributions menu\n   : "
         )
     )
     if proceed_input != "1" and proceed_input != "2":
-
         print_typo()
 
         return receive_proceed_action()
@@ -391,7 +369,6 @@ def receive_proceed_action():
 
 
 def receive_end_program_action(driver):
-
     exit_program = get_input(
         colored(
             "\n-- Type [1] to make another contribution\n-- Type [2] to go back to main menu\n-- Type [3] to exit\n   : "
@@ -405,7 +382,6 @@ def receive_end_program_action(driver):
 
 
 def process_end_program_action(driver, exit_program):
-
     if exit_program == "1":
         return 0
     elif exit_program == "2":
