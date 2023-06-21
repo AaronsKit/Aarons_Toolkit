@@ -115,7 +115,12 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
             driver.switch_to.frame(recaptcha_control_frame)
 
             # click on checkbox to activate recaptcha
-            driver.find_element(By.CLASS_NAME, "recaptcha-checkbox-border").click()
+            WebDriverWait(driver, wait).until(
+                expected_conditions.element_to_be_clickable(
+                    (By.CLASS_NAME, "recaptcha-checkbox-border")
+                )
+            ).click()
+            # driver.find_element(By.CLASS_NAME, "recaptcha-checkbox-border").click()
             print("[INF] checkbox clicked")
 
             start_time = datetime.now().timestamp()
@@ -143,9 +148,12 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                         driver.switch_to.default_content()
                         driver.switch_to.frame(recaptcha_challenge_frame)
 
-                        # time.sleep(random.randrange(10, 15, 1))
-                        time.sleep(2)
-                        driver.find_element(By.ID, "recaptcha-audio-button").click()
+                        WebDriverWait(driver, wait).until(
+                            expected_conditions.element_to_be_clickable(
+                                (By.ID, "recaptcha-audio-button")
+                            )
+                        ).click()
+                        # driver.find_element(By.ID, "recaptcha-audio-button").click()
                         print("[INF] Switched to audio control frame")
                         switched_to_audio = True
 
@@ -160,11 +168,19 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                     driver.switch_to.frame(recaptcha_challenge_frame)
 
                     # Get the mp3 audio file
-                    time.sleep(5)
-                    src = driver.find_element(By.ID, "audio-source").get_attribute(
-                        "src"
+                    # time.sleep(wait)
+                    # src = driver.find_element(By.ID, "audio-source").get_attribute(
+                    #     "src"
+                    # )
+                    src = (
+                        WebDriverWait(driver, wait)
+                        .until(
+                            expected_conditions.presence_of_element_located(
+                                (By.ID, "audio-source")
+                            )
+                        )
+                        .get_attribute("src")
                     )
-                    print(f"[INF] Audio src: {src}")
 
                 except Exception as e:
                     print("[ERR] Error when using Audio challenge frame")
@@ -215,6 +231,7 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                     resource_path(ffmpeg_path),
                     "-i",
                     file_path_mp3,
+                    "-y",
                     file_path_wav,
                 ]
 
@@ -258,16 +275,10 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
 
                 #     os._exit(0)
 
-                # Speech recognition audio to text
-                try:
-                    sample_audio = sr.AudioFile(file_path_wav)
-                except:
-                    print("[ERR] could not convert speech to text")
-                    # what happens if could not convert audio to text
-
                 # Translate audio to text with google voice recognition
                 time.sleep(3)
                 r = sr.Recognizer()
+                sample_audio = sr.AudioFile(file_path_wav)
                 with sample_audio as source:
                     audio = r.record(source)
                     try:

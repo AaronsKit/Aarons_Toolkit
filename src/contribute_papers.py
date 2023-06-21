@@ -284,7 +284,7 @@ def options(login_method, USER_AGENT, storage_directory):
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option("useAutomationExtension", False)
-    chrome_options.page_load_strategy = "none"
+    chrome_options.page_load_strategy = "normal"
     chrome_options.add_experimental_option(
         "prefs",
         {
@@ -630,6 +630,7 @@ def download_articles():
 
         # delete article from local storage
         try:
+            files["file"].close()
             delete_files(doi)
         except:
             print(
@@ -637,30 +638,26 @@ def download_articles():
                 + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
                 + emoji.emojize(":red_exclamation_mark:") * (not is_windows)
                 + colored(
-                    "  Could not delete pdf file locally.",
+                    "   Could not delete pdf file locally.",
                     "red",
                 )
             )
-            try:
-                # delete the entire Aaron's Kit folder
-                delete_temp_storage(storage_directory)
-            except:
-                print(
-                    "\n"
-                    + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
-                    + emoji.emojize(":red_exclamation_mark:") * (not is_windows)
-                    + colored(
-                        "  Could not delete AaronsKit_PDF_Downloads folder. Please navigate to your home folder and delete the folder AaronsKit_PDF_Downloads before you continue."
-                    ),
-                    "red",
-                )
+            print(
+                "\n"
+                + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
+                + emoji.emojize(":loudspeaker:") * (not is_windows)
+                + colored(
+                    f"   Please navigate to {storage_directory} and delete all pdf files before you continue.",
+                    "yellow",
+                ),
+            )
 
-                input(
-                    colored("\n\n-- Press ")
-                    + colored("ENTER/RETURN", attrs=["reverse"]) * (is_windows)
-                    + colored("ENTER/RETURN", attrs=["bold"]) * (not is_windows)
-                    + colored(" to continue: ")
-                )
+            input(
+                colored("\n\n-- Press ")
+                + colored("ENTER/RETURN", attrs=["reverse"]) * (is_windows)
+                + colored("ENTER/RETURN", attrs=["bold"]) * (not is_windows)
+                + colored(" to continue: ")
+            )
 
         if article_json == Article_ID_list[-1]:
             # delete the entire Aaron's Kit folder
@@ -673,9 +670,18 @@ def download_articles():
                     + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
                     + emoji.emojize(":loudspeaker:") * (not is_windows)
                     + colored(
-                        "  Could not delete AaronsKit_PDF_Downloads folder. You can navigate to your home directory to delete it yourself. Note that it is a hidden folder.",
-                    ),
-                    "yellow",
+                        "   Could not delete AaronsKit_PDF_Downloads folder.",
+                        "yellow",
+                    )
+                )
+
+                print(
+                    "\n"
+                    + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
+                    + emoji.emojize(":information:") * (not is_windows)
+                    + colored(
+                        "   You can navigate to your home directory to delete it yourself. Note that it is a hidden folder.",
+                    )
                 )
 
             print(
@@ -683,7 +689,7 @@ def download_articles():
                 + colored(" ! ", "green", attrs=["reverse"]) * (is_windows)
                 + emoji.emojize(":check_mark_button:") * (not is_windows)
                 + colored(
-                    "  You have successfully uploaded your requested papers.",
+                    "   You have successfully uploaded your requested papers.",
                     "green",
                 )
             )

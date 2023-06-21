@@ -36,10 +36,8 @@ The Aaron's Kit executable functions as a tool to (1) bulk download papers for p
 
 3. Ensure that you have Google Chrome installed, if not, download [Google Chrome](https://www.google.com/chrome/?brand=YTUH&gclid=CjwKCAjwzY2bBhB6EiwAPpUpZnxWu_8yGeeRo7u1r8v2NrWiTdkbg82BdHF4uVeBXtjhWq570Fyw_xoCpJsQAvD_BwE&gclsrc=aw.ds).
 
-4. Ensure that you have ffmpeg and ffprobe installed, if not, download and install [ffmpeg](https://ffmpeg.org/download.html). For instructions on how to install ffmpeg and ffprobe on your operating system, visit: [ffmpeg/ffprobe for Windows](https://windowsloop.com/install-ffmpeg-windows-10/) | [ffmpeg/ffprobe for Mac OS](https://bbc.github.io/bbcat-orchestration-docs/installation-mac-manual/).
+4. Download the executable.
 
-5. Download the executable.
-
-6. Put your device on charge and set your computer never to sleep while on battery and on charge. 
+5. Put your device on charge and set your computer never to sleep while on battery and on charge. 
 
 6. Open the executable by double clicking, and select the option **[2] contribute papers**. Follow the prompts that will guide you through the process to login to JSTOR and select the relevant Journal's or Author's papers you would like to contribute.
