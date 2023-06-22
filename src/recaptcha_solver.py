@@ -9,6 +9,7 @@ from datetime import datetime
 import requests
 import warnings
 import sys
+import emoji
 
 from termcolor import colored
 import speech_recognition as sr
@@ -121,7 +122,7 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                 )
             ).click()
             # driver.find_element(By.CLASS_NAME, "recaptcha-checkbox-border").click()
-            print("[INF] checkbox clicked")
+            print("[INF] Checkbox clicked")
 
             start_time = datetime.now().timestamp()
 
@@ -168,18 +169,9 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                     driver.switch_to.frame(recaptcha_challenge_frame)
 
                     # Get the mp3 audio file
-                    # time.sleep(wait)
-                    # src = driver.find_element(By.ID, "audio-source").get_attribute(
-                    #     "src"
-                    # )
-                    src = (
-                        WebDriverWait(driver, wait)
-                        .until(
-                            expected_conditions.presence_of_element_located(
-                                (By.ID, "audio-source")
-                            )
-                        )
-                        .get_attribute("src")
+                    time.sleep(wait * 2)
+                    src = driver.find_element(By.ID, "audio-source").get_attribute(
+                        "src"
                     )
 
                 except Exception as e:
@@ -223,23 +215,40 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                     break
 
                 # Mp3 to wav conversion using ffmpeg
-                ffmpeg_path = os.path.join(
-                    "." + os.sep + "src" + os.sep + "ffmpeg" + os.sep + "ffmpeg"
-                )
+                try:
+                    ffmpeg_path = os.path.join(
+                        "." + os.sep + "src" + os.sep + "ffmpeg" + os.sep + "ffmpeg"
+                    )
 
-                commands_list = [
-                    resource_path(ffmpeg_path),
-                    "-i",
-                    file_path_mp3,
-                    "-y",
-                    file_path_wav,
-                ]
+                    commands_list = [
+                        resource_path(ffmpeg_path),
+                        "-i",
+                        file_path_mp3,
+                        "-y",
+                        file_path_wav,
+                    ]
 
-                if subprocess.run(commands_list).returncode == 0:
-                    print("[INF] Exported audio file to .wav")
-                else:
-                    print("[ERR] Could not run ffmpeg script")
-                    # what happens if ffmpeg script did not run?
+                    if subprocess.run(commands_list).returncode == 0:
+                        print("[INF] Exported audio file to .wav")
+
+                except Exception as e:
+                    print(e)
+
+                    is_windows = system()
+
+                    print(
+                        "\n"
+                        + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
+                        + emoji.emojize(":red_exclamation_mark:") * (not is_windows)
+                        + "   Could not run ffmpeg script."
+                    )
+
+                    print(
+                        "\n"
+                        + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
+                        + emoji.emojize(":information:") * (not is_windows)
+                        + "   Consult the Aaron's Kit troubleshooting section on our website to fix this issue."
+                    )
 
                 # # load downloaded mp3 audio file as .wav
                 # try:
@@ -276,18 +285,18 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                 #     os._exit(0)
 
                 # Translate audio to text with google voice recognition
-                time.sleep(3)
+                time.sleep(5)
                 r = sr.Recognizer()
                 sample_audio = sr.AudioFile(file_path_wav)
                 with sample_audio as source:
                     audio = r.record(source)
                     try:
                         key = r.recognize_google(audio)
-                        print(f"[INF] reCAPTCHA Passcode: {key}")
+                        print(f"[INF] ReCAPTCHA Passcode: {key}")
                         print("[INF] Audio Snippet was recognised")
                     except Exception as e:
                         print(
-                            "[ERR] reCAPTCHA voice segment is too difficult to solve."
+                            "[ERR] ReCAPTCHA voice segment is too difficult to solve."
                         )
                         success = False
                         is_recaptcha_control_active = False

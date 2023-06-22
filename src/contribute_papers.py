@@ -284,7 +284,7 @@ def options(login_method, USER_AGENT, storage_directory):
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option("useAutomationExtension", False)
-    chrome_options.page_load_strategy = "normal"
+    chrome_options.page_load_strategy = "eager"
     chrome_options.add_experimental_option(
         "prefs",
         {
@@ -507,7 +507,7 @@ def download_articles():
         if success == None:
             continue
 
-        time.sleep(wait)
+        time.sleep(wait * 2)
 
         # check for reCAPTCHA
         if not (
