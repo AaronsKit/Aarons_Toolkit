@@ -230,6 +230,24 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
 
                     if subprocess.run(commands_list).returncode == 0:
                         print("[INF] Exported audio file to .wav")
+                    else:
+                        print(
+                            "\n"
+                            + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
+                            + emoji.emojize(":red_exclamation_mark:") * (not is_windows)
+                            + colored("   Could not run ffmpeg script.", "red")
+                        )
+
+                        print(
+                            "\n"
+                            + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
+                            + emoji.emojize(":information:") * (not is_windows)
+                            + "   Consult the Aaron's Kit troubleshooting section on our website to fix this issue and restart Aaron's Toolkit."
+                        )
+
+                        driver.close()
+
+                        os._exit(0)
 
                 except Exception as e:
                     print(e)
@@ -247,8 +265,12 @@ def recaptcha_solver(driver, storage_directory, wait, misc_directory):
                         "\n"
                         + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
                         + emoji.emojize(":information:") * (not is_windows)
-                        + "   Consult the Aaron's Kit troubleshooting section on our website to fix this issue."
+                        + "   Consult the Aaron's Kit troubleshooting section on our website to fix this issue and restart Aaron's Toolkit."
                     )
+
+                    driver.close()
+
+                    os._exit(0)
 
                 # # load downloaded mp3 audio file as .wav
                 # try:
