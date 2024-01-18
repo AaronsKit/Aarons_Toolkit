@@ -231,10 +231,12 @@ def create_driver_session(chrome_options):
     global driver
 
     try:
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager(path=misc_directory).install()),
-            options=chrome_options,
-        )
+        # driver = webdriver.Chrome(
+        #     service=Service(ChromeDriverManager(path=misc_directory).install()),
+        #     options=chrome_options,
+        # )
+
+        driver = webdriver.Chrome(service=Service(), options=chrome_options)
 
         #     # Chromedriver not working for mac m1 currently no fix
         #     # Add it manually to directory and refer to it
@@ -680,7 +682,7 @@ def download_articles():
                     + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
                     + emoji.emojize(":information:") * (not is_windows)
                     + colored(
-                        "   You can navigate to your home directory to delete it yourself. Note that it is a hidden folder.",
+                        "   You can navigate to your home directory to delete it yourself.",
                     )
                 )
 
