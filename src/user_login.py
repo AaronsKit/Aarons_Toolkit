@@ -34,13 +34,6 @@ def print_login_requirements():
     )
 
     print(
-        "\n"
-        + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
-        + emoji.emojize(":information:") * (not is_windows)
-        + "   You will need ffmpeg and ffprobe installed on your device."
-    )
-
-    print(
         "\n\nBefore you start, "
         + colored("ensure that you:", attrs=["reverse"]) * (is_windows)
         + colored("ensure that you:", attrs=["bold", "underline"]) * (not is_windows)
