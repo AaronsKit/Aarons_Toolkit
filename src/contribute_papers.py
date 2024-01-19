@@ -280,7 +280,7 @@ def options(login_method, USER_AGENT, storage_directory):
     chrome_options = webdriver.ChromeOptions()
 
     if login_method == "1":
-        chrome_options.headless = True
+        chrome_options.add_argument("--headless=new")
 
     chrome_options.add_argument(f"user-agent={USER_AGENT}")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
