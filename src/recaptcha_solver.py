@@ -35,7 +35,7 @@ def frame(driver):
     recaptcha_control_frame = None
     recaptcha_challenge_frame = None
 
-    for index, frame in enumerate(frames):
+    for frame in frames:
         # Find the reCAPTCHA checkbox
         if re.search("reCAPTCHA", frame.get_attribute("title")):
             recaptcha_control_frame = frame
