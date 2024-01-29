@@ -6,6 +6,7 @@ import platform
 import emoji
 import json
 import pickle
+import random
 
 from termcolor import colored
 from src.errors import TypoException
@@ -14,12 +15,9 @@ from src.temp_storage import delete_temp_storage
 
 
 def system():
-
-    system = platform.system()
-
     is_windows = False
 
-    if system == "Windows":
+    if "windows" in platform.system():
         os.system("color")
         is_windows = True
 
@@ -29,8 +27,20 @@ def system():
 is_windows = system()
 
 
-def print_typo():
+def background_mode_setting(background_mode):
+    # Define the normal hours (in 24-hour format)
+    # # Generate a random time interval for downloading (e.g., between 30 minutes and 2 hours)
+    if background_mode == "1":
+        random_interval = random.randint(30, 120) * 60  # Convert minutes to seconds
+        start_hour = 8
+        end_hour = 24
+    else:
+        random_interval = 1
+        start_hour = 0
+        end_hour = 24
 
+
+def print_typo():
     print(
         "\n\n"
         + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
@@ -45,10 +55,8 @@ def print_typo():
 
 
 def get_user_address_from_json(misc_directory):
-
     # save the address to a dictionary from the .json file
     with open(os.path.join(misc_directory, "address.json"), "r") as f:
-
         user_address_dict = json.load(f)
 
     f.close()
@@ -57,7 +65,6 @@ def get_user_address_from_json(misc_directory):
 
 
 def receive_network_error_action():
-
     print(
         "\n"
         + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
@@ -81,7 +88,6 @@ def receive_network_error_action():
 
 
 def process_network_error_action(check_internet):
-
     if check_internet == "1":
         return
     elif check_internet == "2":
@@ -92,15 +98,12 @@ def process_network_error_action(check_internet):
 
 
 def server_response_post(driver, url, files, data, article_json, storage_directory):
-
     response = None
 
     retry_upload_count = 0
 
     while retry_upload_count < 3:
-
         try:
-
             response = requests.post(
                 url,
                 files=files,
@@ -111,7 +114,6 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
             response.raise_for_status()  # Raises a HTTPError if the status is 4xx, 5xx
 
         except requests.exceptions.Timeout:
-
             print(
                 "\n"
                 + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -131,14 +133,12 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
             os._exit(0)
 
         except requests.exceptions.ConnectionError:
-
             retry_upload_count += 1
 
             receive_network_error_action()
 
         except requests.exceptions.HTTPError:
             if response.status_code == 500:
-
                 retry_upload_count += 1
 
                 print(
@@ -148,7 +148,6 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
                 )
 
             elif response.status_code == 404:
-
                 print(
                     "\n[ERR] Could not find article: "
                     + article_json["title"]
@@ -157,7 +156,6 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
 
                 break
         else:
-
             print(
                 "\nSucessfully uploaded article: "
                 + article_json["title"]
@@ -170,7 +168,6 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
             break
 
     if retry_upload_count >= 3:
-
         print(
             "\n"
             + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -191,7 +188,6 @@ def server_response_post(driver, url, files, data, article_json, storage_directo
 
 
 def server_response_request(url):
-
     server_error = False
 
     response = None
@@ -199,9 +195,7 @@ def server_response_request(url):
     retry_upload_count = 0
 
     while retry_upload_count < 3:
-
         try:
-
             retry_upload_count += 1
 
             response = requests.get(url)
@@ -209,7 +203,6 @@ def server_response_request(url):
             response.raise_for_status()
 
         except requests.exceptions.Timeout:
-
             print(
                 "\n"
                 + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -225,19 +218,15 @@ def server_response_request(url):
             break
 
         except requests.exceptions.ConnectionError:
-
             receive_network_error_action()
 
         except requests.exceptions.HTTPError:
-
             print("\n[ERR] Could not process request, server error. Retrying.")
 
         else:
-
             break
 
     if retry_upload_count >= 3:
-
         print(
             "\n"
             + colored(" ! ", "red", attrs=["reverse"]) * (is_windows)
@@ -254,7 +243,6 @@ def server_response_request(url):
 
 
 def set_cookies(driver, misc_directory):
-
     # Save the cookies to ensure reCAPTCHA can be solved
     # since login details are required to access the mp3 file
     pickle.dump(

@@ -8,6 +8,7 @@ import string
 import random
 import warnings
 import urllib3
+import subprocess
 
 from termcolor import colored
 from selenium import webdriver
@@ -75,7 +76,7 @@ is_windows = system()
 
 
 def contribute_papers():
-    global algorandAddress, restart_count
+    global algorandAddress, restart_count, caffeinate_process
 
     setup()
 
@@ -118,6 +119,8 @@ def contribute_papers():
                         "red",
                     )
                 )
+
+                caffeinate_process.terminate()
 
                 os._exit(0)
 
@@ -223,6 +226,7 @@ def login():
                         "red",
                     )
                 )
+                caffeinate_process.terminate()
 
                 os._exit(0)
 
@@ -325,7 +329,7 @@ def restart_driver_session(jstor_url, chrome_options, executor_url, session_id):
 
 
 def get_article_ids():
-    global Article_ID_list, jstor_url
+    global Article_ID_list, jstor_url, Background_Mode
 
     if restart_count == 0:
         set_cookies(driver, misc_directory)
@@ -339,7 +343,7 @@ def get_article_ids():
             "\n\n" + colored("JSTOR PDF download specification:\n", attrs=["reverse"])
         )
 
-        Article_ID_list = receive_upload_criteria_action(driver)
+        Article_ID_list, Background_Mode = receive_upload_criteria_action(driver)
 
     elif 0 < restart_count <= 5:
         restart_driver_session(
@@ -368,6 +372,22 @@ def get_article_ids():
         os._exit(0)
 
 
+def background_mode_settings():
+    global random_interval, start_hour, end_hour
+    # Define the normal hours (in 24-hour format)
+    # Generate a random time interval for downloading (e.g., between 1 minute1 and 1 hour)
+    if Background_Mode == "1":
+        # Background mode = set parameters
+        random_interval = random.randint(1, 3) * 60  # Convert minutes to seconds
+        start_hour = 8
+        end_hour = 18
+    else:
+        # Nornal mode = default parameters
+        random_interval = 0
+        start_hour = 0
+        end_hour = 24
+
+
 def download_articles():
     global article_index, now, restart_count, wait
 
@@ -377,6 +397,7 @@ def download_articles():
 
     # loop through user requested article ID's
     # if error occurs, restart the web session and start at last indexed ID
+
     for index, article_json in enumerate(Article_ID_list):
         article = article_json["articleJstorID"]
 
@@ -697,6 +718,21 @@ def download_articles():
             )
 
             break
+
+        # time and interval buffer for background mode
+        current_hour = time.localtime().tm_hour
+
+        background_mode_settings()
+
+        if start_hour <= current_hour < end_hour:
+            # Sleep for the random interval before downloading the next paper
+            time.sleep(random_interval)
+        else:
+            # Sleep until the start of normal hours
+            time_to_start = (
+                start_hour - current_hour
+            ) * 3600  # Convert hours to seconds
+            time.sleep(time_to_start)
 
     # stop when all articles have downloaded or when server error, otherwise navigate to home page and restart web session
     if article_json == Article_ID_list[-1] and not restart:

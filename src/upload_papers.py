@@ -38,8 +38,8 @@ def process_upload_criteria_action(driver, search_criteria):
         if Article_ID_list == []:
             return receive_retry_search_action(driver, search_criteria, "Journal")
         else:
-            print_pdf_found()
-            return Article_ID_list
+            Background_Mode = print_pdf_found()
+            return Article_ID_list, Background_Mode
 
     elif search_criteria == "2":
         Article_ID_list = request_author_upload(driver)
@@ -47,8 +47,8 @@ def process_upload_criteria_action(driver, search_criteria):
         if Article_ID_list == []:
             return receive_retry_search_action(driver, search_criteria, "Author")
         else:
-            print_pdf_found()
-            return Article_ID_list
+            Background_Mode = print_pdf_found()
+            return Article_ID_list, Background_Mode
 
     else:
         print_typo()
@@ -142,7 +142,7 @@ def receive_author_selection_action(driver, Author_List_json):
 
 
 def process_author_selection_action(driver, Author_Number, Author_List_json):
-    if Author_Number in [str(x) for x in list(range(1, 11))]:
+    if Author_Number in [str(x) for x in list(range(1, len(Author_List_json) + 1))]:
         Author_Selected_urlenc = urllib.parse.quote(
             Author_List_json[int(Author_Number) - 1]["authorName"]
         )
@@ -260,12 +260,46 @@ def request_journal_upload(driver):
             + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
             + emoji.emojize(":loudspeaker:") * (not is_windows)
             + colored(
-                "  The requested journal could not be found.\n",
+                "   The requested journal could not be found.\n",
                 "yellow",
             )
         )
 
         return []
+
+
+def receive_paper_count_action():
+    print(
+        "\n"
+        + (colored(" i ", "blue", attrs=["reverse"])) * (is_windows)
+        + (emoji.emojize(":information:")) * (not is_windows)
+        + colored(
+            f"   Please indicate how many papers you would like to contribute (EXAMPLE: 50, 300, 1000, etc.)."
+        )
+    )
+
+    try:
+        Number_of_Papers = int(
+            input(
+                "\n-- Type the number of papers you are willing to contribute\n   : "
+            ).strip()
+        )
+    except:
+        print_typo()
+        return receive_paper_count_action()
+
+    try:
+        return process_paper_count_action(Number_of_Papers)
+    except TypoException:
+        return receive_paper_count_action()
+
+
+def process_paper_count_action(Number_of_Papers):
+    if Number_of_Papers > 0:
+        return Number_of_Papers
+    else:
+        print_typo()
+        raise TypoException
 
 
 def receive_journal_selection_action(driver, Journal_List_json):
@@ -291,38 +325,21 @@ def receive_journal_selection_action(driver, Journal_List_json):
         )
     )
 
-    print(
-        "\n"
-        + (colored(" i ", "blue", attrs=["reverse"])) * (is_windows)
-        + (emoji.emojize(":information:")) * (not is_windows)
-        + colored(f"   Please indicate how many papers you would like to contribute (EXAMPLE: 50, 300, 1000, etc.).")
-    )
-
-    while True:
-        Number_of_Papers = int(
-            input(
-                "\n-- Type the number of papers you are willing to contribute\n   : "
-            ).strip()
-        )
-
-        if Number_of_Papers > 0:
-            break
-
     try:
         return process_journal_selection_action(
-            driver, Journal_Number, Journal_List_json, Number_of_Papers
+            driver, Journal_Number, Journal_List_json
         )
     except TypoException:
         return receive_journal_selection_action(driver, Journal_List_json)
 
 
-def process_journal_selection_action(
-    driver, Journal_Number, Journal_List_json, Number_of_Papers
-):
-    if Journal_Number in [str(x) for x in list(range(1, 11))]:
+def process_journal_selection_action(driver, Journal_Number, Journal_List_json):
+    if Journal_Number in [str(x) for x in list(range(1, len(Journal_List_json) + 1))]:
         Journal_Selected_urlenc = urllib.parse.quote(
             Journal_List_json[int(Journal_Number) - 1]["journalName"]
         )
+
+        Number_of_Papers = receive_paper_count_action()
 
         server_error, Article_ID_list = server_response_request(
             f"https://api-service-mrz6aygprq-oa.a.run.app/api/articles?journalName={Journal_Selected_urlenc}&scraped=0&exact=1&page_size={Number_of_Papers}&page=1",
@@ -416,7 +433,42 @@ def process_retry_search_action(driver, not_found, search_criteria):
         raise TypoException
 
 
+def receive_background_selection_action():
+    print("\n\n" + colored("Background mode", attrs=["reverse"]))
+
+    print(
+        "\n\nIn background mode, research papers will be uploaded randomly during regular hours to avoid overloading the JSTOR server.\n",
+    )
+    print(
+        "\n"
+        + (colored(" i ", "blue", attrs=["reverse"])) * (is_windows)
+        + (emoji.emojize(":information:")) * (not is_windows)
+        + colored(f"   Would you like to contribute in background mode?  ")
+    )
+
+    Background_Mode = get_input(
+        colored(
+            "\n-- Type [1] for Yes" + "\n-- Type [2] for No" + "\n   : ",
+        )
+    )
+
+    try:
+        return process_background_selection_action(Background_Mode)
+    except TypoException:
+        return receive_background_selection_action()
+
+
+def process_background_selection_action(Background_Mode):
+    if (Background_Mode == "1") or (Background_Mode == "2"):
+        return Background_Mode
+    else:
+        print_typo()
+        raise TypoException
+
+
 def print_pdf_found():
+    Background_Mode = receive_background_selection_action()
+
     print(
         "\n\n"
         + colored(" i ", "blue", attrs=["reverse"]) * (is_windows)
@@ -443,6 +495,8 @@ def print_pdf_found():
     )
 
     time.sleep(1)
+
+    return Background_Mode
 
 
 def get_input(text):
