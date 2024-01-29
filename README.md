@@ -20,7 +20,7 @@ The Aaron's Kit executable functions as a tool to (1) bulk download papers for p
 
 1. Ensure that you have a stable internet connection.
 
-2. Download the executable.
+2. [Download the executable] (https://github.com/AaronsKit/Aarons_Toolkit/releases/tag/v0.1.0).
 
 3. Open the executable by double clicking, and select the option **[1] download papers**. Follow the prompts that will guide you through the journal selection and download process.
 
@@ -36,7 +36,7 @@ The Aaron's Kit executable functions as a tool to (1) bulk download papers for p
 
 3. Ensure that you have Google Chrome installed, if not, download [Google Chrome](https://www.google.com/chrome/?brand=YTUH&gclid=CjwKCAjwzY2bBhB6EiwAPpUpZnxWu_8yGeeRo7u1r8v2NrWiTdkbg82BdHF4uVeBXtjhWq570Fyw_xoCpJsQAvD_BwE&gclsrc=aw.ds).
 
-4. Download the executable.
+4. [Download the executable] (https://github.com/AaronsKit/Aarons_Toolkit/releases/tag/v0.1.0).
 
 5. Put your device on charge and set your computer never to sleep while on battery and on charge. 
 
