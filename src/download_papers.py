@@ -453,11 +453,20 @@ def get_articles(
             )
         )
 
+        print(
+            "\n"
+            + (colored(" ! ", "yellow", attrs=["reverse"])) * (is_windows)
+            + (emoji.emojize(":loudspeaker:")) * (not is_windows)
+            + colored(
+                "   Try to search for another journal/author, or wait until this journal/author has been uploaded to our database.\n",
+                "yellow",
+            )
+        )
+
     if journal_id and articles_size > 0:
         receive_next_page_action()
     else:
         receive_continue_download_action()
-        
 
 
 def receive_next_page_action():

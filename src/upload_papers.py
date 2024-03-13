@@ -186,7 +186,7 @@ def process_author_selection_action(driver, Author_Number, Author_List_json):
                     + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
                     + emoji.emojize(":loudspeaker:") * (not is_windows)
                     + colored(
-                        "  It appears that all articles by this author are already available.\n",
+                        "  It appears that all articles by this author are already available, try another author.\n",
                         "yellow",
                     )
                 )
@@ -382,7 +382,7 @@ def process_journal_selection_action(driver, Journal_Number, Journal_List_json):
                     + colored(" ! ", "yellow", attrs=["reverse"]) * (is_windows)
                     + emoji.emojize(":loudspeaker:") * (not is_windows)
                     + colored(
-                        "   It appears that all articles from this journal are already available.\n",
+                        "   It appears that all articles from this journal are already available, try another journal.\n",
                         "yellow",
                     )
                 )

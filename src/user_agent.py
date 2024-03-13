@@ -3,7 +3,8 @@ import emoji
 import textwrap
 
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+
+# from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from termcolor import colored
@@ -32,9 +33,11 @@ def get_user_agent(wait):
 
         chrome_options.add_argument("--window-size=1920,1080")
 
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=chrome_options
-        )
+        # driver = webdriver.Chrome(
+        #     service=Service(ChromeDriverManager().install()), options=chrome_options
+        # )
+
+        driver = webdriver.Chrome(service=Service(), options=chrome_options)
 
         driver.minimize_window()
 
